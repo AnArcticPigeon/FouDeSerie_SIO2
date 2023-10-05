@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les Series{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Les Series ({{ countSeries }})</h1><br>
+
+    <div class="row">
+        {% for uneSerie in lesSeries %}
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 d-flex flex-column">
+                <img class="card-img-top" src="{{ uneSerie.image }}" alt="Card image cap">
+                <div class="card-footer text-muted">
+                    <div style="float:left">
+                        <h5>{{ uneSerie.titre }}</h5>
+                    </div>
+                    <div style="center">
+                    <center>
+                        <a href="{{path('app_series_detail', {id:uneSerie.id})}}" class="btn btn-primary">Detail</a>
+                    </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
