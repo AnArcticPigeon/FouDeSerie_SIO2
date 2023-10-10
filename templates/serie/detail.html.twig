@@ -37,9 +37,9 @@
                 <div class="col-md-8">
                     <div class="movie-detail">
                         <h1 class="mb-4"> {{ uneSerie.titre }}</h1>
-                        <p><strong>Premiere Diffusion:</strong> {{ uneSerie.premiereDiffusion }}</p>
+                        <p><strong>Premiere Diffusion:</strong> {{ uneSerie.premiereDiffusion|date('d/m/y') }}</p>
                         <p><strong>Nombres d'Episodes:</strong> {{ uneSerie.nbEpisodes }}</p>
-                        <p><strong>Pays d'origine:</strong> {{ uneSerie.pays.nomPays }} <img src="{{ uneSerie.pays.drapeau }}" alt=""  width="75" height="37.5"></p>
+                        {#<p><strong>Pays d'origine:</strong> {{ uneSerie.pays.nomPays }} <img src="{{ uneSerie.pays.drapeau }}" alt=""  width="75" height="37.5"></p>#}
                         <h5 class="mt-4"><strong>Court Resume:</strong></h5>
                         <p>{{ uneSerie.resume }}</p>
                     </div>
