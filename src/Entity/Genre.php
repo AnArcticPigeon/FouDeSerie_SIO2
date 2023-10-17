@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\PaysRepository;
+use App\Repository\GenreRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PaysRepository::class)]
-class Pays
+#[ORM\Entity(repositoryClass: GenreRepository::class)]
+class Genre
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -16,11 +16,10 @@ class Pays
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nom = null;
+    private ?string $libelle = null;
 
-    #[ORM\OneToMany(mappedBy: 'lePays', targetEntity: Serie::class)]
+    #[ORM\ManyToMany(targetEntity: Serie::class, mappedBy: 'lesGenres')]
     private Collection $lesSeries;
-
 
     public function __construct()
     {
@@ -32,14 +31,14 @@ class Pays
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getLibelle(): ?string
     {
-        return $this->nom;
+        return $this->libelle;
     }
 
-    public function setNom(string $nom): static
+    public function setLibelle(string $libelle): static
     {
-        $this->nom = $nom;
+        $this->libelle = $libelle;
 
         return $this;
     }
@@ -56,7 +55,7 @@ class Pays
     {
         if (!$this->lesSeries->contains($lesSeries)) {
             $this->lesSeries->add($lesSeries);
-            $lesSeries->setLePays($this);
+            $lesSeries->addLesGenre($this);
         }
 
         return $this;
@@ -65,10 +64,7 @@ class Pays
     public function removeLesSeries(Serie $lesSeries): static
     {
         if ($this->lesSeries->removeElement($lesSeries)) {
-            // set the owning side to null (unless already changed)
-            if ($lesSeries->getLePays() === $this) {
-                $lesSeries->setLePays(null);
-            }
+            $lesSeries->removeLesGenre($this);
         }
 
         return $this;
