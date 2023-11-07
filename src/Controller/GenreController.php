@@ -32,18 +32,26 @@ class GenreController extends AbstractController
 ;-()x
             $entityManager->persist($genre);
             $entityManager->flush();
-            */
+            
             
             $leGenre = $genreRepo->find(1);
            
-            
             $laSerie = $serieRepo->find(1);
             $laSerie->addLesGenre($leGenre);
             $entityManager->persist($laSerie);
             
             // actually executes the queries (i.e. the INSERT query)*
             $entityManager->flush();
+            
+
 
          return new Response('Saved new product with id '.$laSerie->getId());
+         */
+
+        $genre = new Genre();
+        $genre->setLibelle('Drama');
+        $entityManager->persist($genre);
+        $entityManager->flush();
+
     }
 }

@@ -8,7 +8,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table(name: 'serie')]
 #[ORM\Entity(repositoryClass: SerieRepository::class)]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ ORM\DiscriminatorColumn(name: 'type', type: 'string')]
+#[ ORM\DiscriminatorMap(['tv' => SerieTV::class, 'web' => WebSerie::class])]
 class Serie
 {
     #[ORM\Id]

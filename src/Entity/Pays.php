@@ -21,6 +21,9 @@ class Pays
     #[ORM\OneToMany(mappedBy: 'lePays', targetEntity: Serie::class)]
     private Collection $lesSeries;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $drapeau = null;
+
 
     public function __construct()
     {
@@ -70,6 +73,18 @@ class Pays
                 $lesSeries->setLePays(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDrapeau(): ?string
+    {
+        return $this->drapeau;
+    }
+
+    public function setDrapeau(?string $drapeau): static
+    {
+        $this->drapeau = $drapeau;
 
         return $this;
     }

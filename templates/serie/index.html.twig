@@ -11,24 +11,52 @@
 <div class="example-wrapper">
     <h1>Les Series ({{ countSeries }})</h1><br>
 
-    <div class="row">
-        {% for uneSerie in lesSeries %}
+<div class="row">
+    {% if lesSeriesTV is not empty %}
+    <h4>Les Series TV</h4>
+        {% for uneSerie in lesSeriesTV %}
         <div class="col-md-3 mb-4">
             <div class="card h-100 d-flex flex-column">
-                <img class="card-img-top" src="{{ uneSerie.image }}" alt="Card image cap">
-                <div class="card-footer text-muted">
-                    <div style="float:left">
+                <div name="divImage" style="flex: 1 0 auto;">
+                    <img class="card-img-top" src="{{ asset('images/'~uneSerie.image) }}" alt="Card image cap">
+                </div>
+                <div name="divPadding" style="flex: 0 0 auto; height: 0;"> <!-- Set the height to 0 by default -->
+                </div>
+                <div name="divFooter" class="card-footer text-muted">
+                    <div style="float: left;">
                         <h5>{{ uneSerie.titre }}</h5>
                     </div>
-                    <div style="center">
-                    <center>
-                        <a href="{{path('app_series_detail', {id:uneSerie.id})}}" class="btn btn-primary">Detail</a>
-                    </center>
+                    <div style="text-align: center;">
+                        <a href="{{ path('app_series_detail', {id: uneSerie.id}) }}" class="btn btn-primary">Detail</a>
                     </div>
                 </div>
             </div>
         </div>
         {% endfor %}
+    {% endif %}
+            
+         {% if lesSeriesWeb is not empty %}
+        <h4>Les Series Web</h4>
+        {% for uneSerie in lesSeriesWeb %}
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 d-flex flex-column">
+                <div name="divImage" style="flex: 1 0 auto;">
+                    <img class="card-img-top" src="{{ asset('images/'~uneSerie.image) }}" alt="Card image cap">
+                </div>
+                <div name="divPadding" style="flex: 0 0 auto; height: 0;"> <!-- Set the height to 0 by default -->
+                </div>
+                <div name="divFooter" class="card-footer text-muted">
+                    <div style="float: left;">
+                        <h5>{{ uneSerie.titre }}</h5>
+                    </div>
+                    <div style="text-align: center;">
+                        <a href="{{ path('app_series_detail', {id: uneSerie.id}) }}" class="btn btn-primary">Detail</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
     </div>
 
 </div>

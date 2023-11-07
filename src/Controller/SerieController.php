@@ -3,6 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Serie;
+use App\Entity\SerieTV;
+use App\Entity\WebSerie;
+use App\Repository\GenreRepository;
+use App\Repository\PaysRepository;
+use App\Repository\SerieRepository;
+use App\Repository\SerieTVRepository;
+use App\Repository\WebSerieRepository;
 use App\Services\SerieService;
 use App\Services\PaysService;
 use DateTime;
@@ -32,7 +39,7 @@ class SerieController extends AbstractController
     }
 
     #[Route('/series', name: 'app_series')]
-    public function index(ManagerRegistry $doctrine)
+    public function index(ManagerRegistry $doctrine, SerieTVRepository $serieTvRepo, WebSerieRepository $webSerieRepo)
     {
         /*Cette instruction renvoie une instance de la classe ProductRepository; Le
         lien a été fait grace à l'attribut PHP #[ORM\Entity(repositoryClass:…) dans
@@ -45,7 +52,8 @@ class SerieController extends AbstractController
         $countSeries = count($lesSeries);
         return $this->render('serie/index.html.twig', [
             'controller_name' => 'SerieController',
-            'lesSeries' => $lesSeries,
+            'lesSeriesTV' => $lesSeriesTV = $serieTvRepo->findBy([],['titre' => 'ASC']),
+            'lesSeriesWeb' => $lesSeriesWeb = $webSerieRepo->findBy([],['titre' => 'ASC']),
             'countSeries' => $countSeries,
         ]);
     }
@@ -59,6 +67,30 @@ class SerieController extends AbstractController
             'controller_name' => 'SerieController',
             'uneSerie' => $laSerie,
         ]);
+    }
+
+    #[Route('/testWebSerie', name: 'testWebSerie')]
+    public function testWebSerie(ManagerRegistry $doctrine, GenreRepository $genreRepo, PaysRepository $paysRepo)
+    {
+        $webSerie = new WebSerie();
+        $webSerie->setTitre('00Penguin7');
+        $webSerie->setResume("L'Agent 007 recois une nouvelle missions, vaincre le grand mechant Ocre.");
+        $webSerie->setPremiereDiffusion(new DateTime("06-11-2016"));
+        $webSerie->setNbEpisodes(7);
+        $webSerie->setImage('https://ibb.co/y0RtpDG');
+        $webSerie->setSite("https://www.google.com/search?client=firefox-b-d&q=penguin+rickroll+video#");
+        $lePays = $paysRepo->find(1);
+        $webSerie->setLePays($lePays);
+        $genre1 = $genreRepo->findByLibelle("Drama");
+        $genre2 = $genreRepo->findByLibelle("Action",);
+        $genre3 = $genreRepo->findByLibelle("Thriller");
+        $webSerie->addLesGenre($genre1[0]);
+        $webSerie->addLesGenre($genre2[0]);
+        $webSerie->addLesGenre($genre3[0]);
+        
+        $entityManager=$doctrine->getManager();
+        $entityManager->persist($webSerie);
+        $entityManager->flush();
     }
 
 }
