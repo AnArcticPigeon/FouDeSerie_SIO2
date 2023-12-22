@@ -14,6 +14,7 @@ use App\Services\SerieService;
 use App\Services\PaysService;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -61,8 +62,25 @@ class SerieController extends AbstractController
     #[Route('/series/{id}', name: 'app_series_detail')]
     public function Detail($id, ManagerRegistry $doctrine)
     {
-        $repository = $doctrine->getRepository(Serie::class);
-        $laSerie = $repository->find($id);
+        
+        try {
+            $repository = $doctrine->getRepository(Serie::class);
+            dump($repository->find($id));
+            if ( !$repository->find($id) ) {
+                dump('test');
+               throw $this->createNotFoundException('Series Introuvable');
+            }
+                $laSerie = $repository->find($id);
+        }
+        catch ( Exception $e ) {
+            return $this->render('error/error.html.twig', [
+                'controller_name' => 'SerieController',
+                'errorMessage' => $e->getMessage(),
+                'errorCode' => $e->getCode()
+
+            ]);
+        }
+
         return $this->render('serie/detail.html.twig', [
             'controller_name' => 'SerieController',
             'uneSerie' => $laSerie,

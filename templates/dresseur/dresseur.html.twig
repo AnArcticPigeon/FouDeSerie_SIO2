@@ -1,0 +1,15 @@
+{% extends 'basePokemon.html.twig' %}
+
+{% block title %}
+	Ajouter une pokemon
+{% endblock %}
+
+
+{% block body %}
+	<div class="row">
+		{{ form_start(formAddDresseur) }}
+		{{ form_row(formAddDresseur.nom) }}
+		<input type="submit" value="enregistrer">
+		{{ form_end(formAddDresseur) }}
+	</div>
+{% endblock %}

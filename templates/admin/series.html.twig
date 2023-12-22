@@ -3,22 +3,6 @@
 {% block title %}Les Series{% endblock %}
 
 {% block body %}
-{% for message in app.flashes('success') %}
-    <div class="alert alert-success" role="alert">
-        {{message}}
-    </div>
-{% endfor %}
-{% for message in app.flashes('successDelete') %}
-    <div class="alert alert-alert" role="alert">
-        {{message}}
-    </div>
-{% endfor %}
-{% for message in app.flashes('error') %}
-    <div class="alert alert-danger" role="alert">
-        {{message}}
-    </div>
-{% endfor %}
-
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
@@ -26,6 +10,33 @@
 
 <div class="example-wrapper">
     <h1>Les Series ({{ countSeries }})</h1><br>
+
+<div class="row">
+{% if lesSeriesTV is not empty %}
+    <h4>Les Series TV</h4>
+    {% for uneSerie in lesSeriesTV %}
+        <ol class="list-group">
+            <li class="list-group-item">
+            <div>
+                <h5>{{ uneSerie.titre }}</h5>
+                <a href="{{ path('app_SerieTVModify', {id: uneSerie.id}) }}" class="btn btn-primary">Modifier</a>
+                <form onSubmit="return confirm('Sure Sure ?')" action="{{ path('app_SerieDelete', {id : uneSerie.id}) }}", method="post">
+                    <input type="hidden" name="_method" value="delete">
+                    <input type="hidden" name="token" value="{{ csrf_token('deleteToken' ~ uneSerie.id) }}">
+
+                    <button type="submit" class="btn btn-danger">Deletation Totales</button>
+                </form>
+
+            </div>
+            </li>
+        </ol>
+    {% endfor %}
+{% endif %}
+
+    
+</div>
+
+
 
 <div class="row">
     {% if lesSeriesTV is not empty %}
@@ -43,7 +54,16 @@
                         <h5>{{ uneSerie.titre }}</h5>
                     </div>
                     <div style="text-align: center;">
-                        <a href="{{ path('app_series_detail', {id: uneSerie.id}) }}" class="btn btn-primary">Detail</a>
+                        <a href="{{ path('app_SerieTVModify', {id: uneSerie.id})  }}" class="btn btn-primary">Modifier</a>
+
+                        <form action="{{ path('app_SerieDelete', {id : uneSerie.id}) }}", method="post">
+
+                            <input type="hidden" name="_method" value="delete">
+                            <input type="hidden" name="token" value="{{ csrf_token('deleteToken') }}">
+
+                            <button type="submit" class="btn btn-danger">Deletation Totales</button>
+                        </form>
+                        
                     </div>
                 </div>
             </div>
@@ -66,7 +86,14 @@
                         <h5>{{ uneSerie.titre }}</h5>
                     </div>
                     <div style="text-align: center;">
-                        <a href="{{ path('app_series_detail', {id: uneSerie.id}) }}" class="btn btn-primary">Detail</a>
+                        <a href="{{ path('app_SerieWEBModify', {id: uneSerie.id}) }}" class="btn btn-primary">Modifier</a>
+                        <form action="{{ path('app_SerieDelete', {id : uneSerie.id}) }}", method="post">
+
+                            <input type="hidden" name="_method" value="delete">
+                            <input type="hidden" name="token" value="{{ csrf_token('deleteToken') }}">
+
+                            <button type="submit" class="btn btn-danger">Deletation Totales</button>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -7,12 +7,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert ;
 
 #[ORM\Table(name: 'serie')]
 #[ORM\Entity(repositoryClass: SerieRepository::class)]
 #[ORM\InheritanceType('SINGLE_TABLE')]
 #[ ORM\DiscriminatorColumn(name: 'type', type: 'string')]
 #[ ORM\DiscriminatorMap(['tv' => SerieTV::class, 'web' => WebSerie::class])]
+
 class Serie
 {
     #[ORM\Id]
@@ -20,7 +22,7 @@ class Serie
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique:true)]
     private ?string $titre = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -30,9 +32,12 @@ class Serie
     private ?\DateTimeInterface $premiereDiffusion = null;
 
     #[ORM\Column(nullable: true, name: 'nbEpisodes')]
+    #[Assert\GreaterThan(0, message: "pas assez d'episodes")]
+    #[Assert\LessThan(1000, message: "trop d'episodes")]
     private ?int $nbEpisodes = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Image()]
     private ?string $image = null;
 
     #[ORM\ManyToOne(inversedBy: 'lesSeries')]

@@ -1,0 +1,21 @@
+{% extends 'basePokemon.html.twig' %}
+
+{% block title %}
+	Ajouter une pokemon
+{% endblock %}
+
+
+{% block body %}
+	<div class="row">
+		{{ form_start(formAddPokemon) }}
+		{{ form_row(formAddPokemon.nom) }}
+		{{ form_row(formAddPokemon.poids) }}
+		{{ form_row(formAddPokemon.nbPattes) }}
+		{{ form_row(formAddPokemon.taille) }}
+		{{ form_row(formAddPokemon.nbHeuresTv) }}
+		{{ form_row(formAddPokemon.lesAttaques) }}
+		{{ form_row(formAddPokemon.leDresseur) }}
+		<input type="submit" value="enregistrer" name="btnSubmit">
+		{{ form_end(formAddPokemon) }}
+	</div>
+{% endblock %}

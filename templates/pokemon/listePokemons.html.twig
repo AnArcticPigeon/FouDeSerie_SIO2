@@ -1,0 +1,44 @@
+{% extends 'basePokemon.html.twig' %}
+
+{% block title %}
+	Liste des pokemons
+{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+{% endblock %}
+
+
+{% block body %}
+
+{% for message in app.flashes('successDelete') %}
+    <div class="alert alert-success" role="alert">
+        {{message}}
+    </div>
+{% endfor %}
+
+	<div class="row">
+
+		<a href="{{path('app_pokemonCasanier_add')}}">
+			<button type="button" class="btn btn-primary">Ajouter un pokemon casanier</button>
+		</a>
+		<table class="table table-striped mt-5">
+			{% for unPokemon in lesPokemons %}
+				<tr>
+					<td>{{unPokemon.id}}</td>
+					<td>{{unPokemon.nom}}</td>
+					<td>
+					<form onSubmit="return confirm('Sure Sure ?')" action="{{ path('app_pokemonDelete', {id : unPokemon.id}) }}", method="delete">
+						<input type="hidden" name="_method" value="delete">
+						<input type="hidden" name="token" value="{{ csrf_token('deleteToken' ~ unPokemon.id) }}">
+
+						<button type="submit" class="btn btn-danger">Kill That Pokemon</button>
+                	</form>
+					</td>
+				</tr>
+				
+
+			{% endfor %}
+		</table>
+	</div>
+{% endblock %}

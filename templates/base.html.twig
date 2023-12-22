@@ -11,27 +11,32 @@
         {% endblock %}
     </head>
     <header>
-            <div class="card text-center">
-        <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs">
-            <li class="nav-item">
-                <a class="nav-link disabled" aria-disabled="true">Penguin TV</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{path('app_home')}}">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{path('app_news')}}">News</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{path('app_series')}}">Series</a>
-            </li>
-            </ul>
-        </div>
+        <div class="card text-center" position="fixed" top="0">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item">
+                    <a class="nav-link disabled" aria-disabled="true">Penguin TV</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{path('app_home')}}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{path('app_news')}}">News</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{path('app_series')}}">Series</a>
+                </li>
+                <li class="nav-item" style="margin-left:77%">
+                    <a class="nav-link" href="{{path('app_admin')}}">Admin</a>
+                </li>
+                </ul>
+            </div>
         </div>
     </header>
     <body>
-        {% block body %}{% endblock %}
+        {% block body %}
+
+        {% endblock %}
     </body>
 </html>
 
