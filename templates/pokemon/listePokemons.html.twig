@@ -31,7 +31,7 @@
 					<td>{{unPokemon.id}}</td>
 					<td>{{unPokemon.nom}}</td>
 					<td>
-					<form onSubmit="return confirm('Sure Sure ?')" action="{{ path('app_pokemonDelete', {id : unPokemon.id}) }}", method="delete">
+					<form onSubmit="return confirm('Sure Sure ?')" action="{{ path('app_pokemonDelete', {id : unPokemon.id}) }}", method="post">
 						<input type="hidden" name="_method" value="delete">
 						<input type="hidden" name="token" value="{{ csrf_token('deleteToken' ~ unPokemon.id) }}">
 
