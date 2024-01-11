@@ -6,11 +6,13 @@ use App\Repository\PokemonRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity ;
 
 #[ORM\Entity(repositoryClass: PokemonRepository::class)]
 #[ORM\InheritanceType('SINGLE_TABLE')]
 #[ ORM\DiscriminatorColumn(name: 'type', type: 'string')]
 #[ ORM\DiscriminatorMap(['mer' => PokemonMer::class, 'casanier' => PokemonCasanier::class])]
+#[UniqueEntity('nom')]
 
 class Pokemon
 {

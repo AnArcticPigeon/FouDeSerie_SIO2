@@ -10,8 +10,10 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\PokemonCasanier;
 use App\Entity\Pokemon;
+use App\Entity\PokemonMer;
 use App\Form\AddDresseurType;
 use App\Form\PokemonCasanierType;
+use App\Form\PokemonMerType;
 use Exception;
 
 class PokemonController extends AbstractController
@@ -25,11 +27,19 @@ class PokemonController extends AbstractController
                             ['lesPokemons' => $lesPokemons] );
     }
 
-    #[Route('/pokemonCasanier/add', name: 'app_pokemonCasanier_add')]
-    public function addPokemon( Request $request, ManagerRegistry $doctrine): Response
+    #[Route('/pokemon/{type}/add', name: 'app_pokemonCasanier_add')]
+    public function addPokemon($type, Request $request, ManagerRegistry $doctrine): Response
     {
-        $pokemon= new PokemonCasanier();
+        if($type == "cassanier") {
+            $pokemon = new PokemonCasanier();
         $form=$this->createForm(PokemonCasanierType::class, $pokemon);
+        }
+
+        elseif($type == "mer") {
+            $pokemon = new PokemonMer();
+            $form=$this->createForm(PokemonMerType::class, $pokemon);
+        }
+
         $form->handleRequest($request);
         if($form->isSubmitted() and $form->isValid()){
             $entityManager = $doctrine->getManager();
@@ -39,7 +49,9 @@ class PokemonController extends AbstractController
         }     
         return $this->render('pokemon/addPokemonCasanier.html.twig', [
             'formAddPokemon' => $form->createView(),
+            'type' => $type
         ]);
+        
     }
 
     #[Route('/dresseur/add', name: 'app_dresseur_add')]
@@ -62,22 +74,37 @@ class PokemonController extends AbstractController
     #[Route('/pokemonCassanier/modif/{id}', name: 'app_pokemonCassanier_modif')]
     public function pokemonCassanierModif($id, Request $request, ManagerRegistry $doctrine): Response
     {
-        $repository = $doctrine->getRepository(PokemonCasanier::class);
-        $pokemon = $repository->find($id);
-        $form=$this->createForm(PokemonCasanierType::class, $pokemon);
-        $form->handleRequest($request);
-        if($form->isSubmitted() and $form->isValid()){
-            $entityManager=$doctrine->getManager();
-            $entityManager->persist($pokemon);
-            $entityManager->flush();
-            return $this->redirectToRoute('app_pokemon_liste');
-        };
+        try{
+            $repository = $doctrine->getRepository(Pokemon::class);
+            $pokemon = $repository->find($id);
+            if(!$pokemon){
+                throw $this->createNotFoundException('pokemon introuvable');
+            }
+            if ($pokemon instanceof PokemonCasanier){
+                $form=$this->createForm(PokemonCasanierType::class, $pokemon);
+                $type = "cassanier";
+            }
+            if ($pokemon instanceof PokemonMer){
+                $form=$this->createForm(PokemonMerType::class, $pokemon);
+                $type = "mer";
+            }
+            $form->handleRequest($request);
+            if($form->isSubmitted() and $form->isValid()){
+                $entityManager=$doctrine->getManager();
+                $entityManager->persist($pokemon);
+                $entityManager->flush();
+                return $this->redirectToRoute('app_pokemon_liste');
+            };
 
-        return $this->render('pokemon/modifyPokemon.html.twig', [
-            'controller_name' => 'AdminController',
-            'type' => 'PokemonCassanier',
-            'formAddPokemon' => $form -> createView(),
-        ]);
+            return $this->render('pokemon/modifyPokemon.html.twig', [
+                'controller_name' => 'AdminController',
+                'type' => $type,
+                'formAddPokemon' => $form -> createView(),
+            ]);
+        }
+        catch (\Exception $e) {
+            return $this->render('errors/error.html.twig',['message'=>$e]);
+        };
     }
 
     #[Route('/pokemon/delete/{id}', name: 'app_pokemonDelete')]

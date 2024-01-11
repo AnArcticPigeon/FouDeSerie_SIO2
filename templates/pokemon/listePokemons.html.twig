@@ -18,9 +18,12 @@
 {% endfor %}
 
 	<div class="row">
-
-		<a href="{{path('app_pokemonCasanier_add')}}">
+	
+		<a href="{{path('app_pokemonCasanier_add', { type : "cassanier" }) }}">
 			<button type="button" class="btn btn-primary">Ajouter un pokemon casanier</button>
+		</a>
+		<a href="{{path('app_pokemonCasanier_add', { type : "mer" }) }}">
+			<button type="button" class="btn btn-primary">Ajouter un pokemon mer</button>
 		</a>
 		<table class="table table-striped mt-5">
 			{% for unPokemon in lesPokemons %}
@@ -33,6 +36,11 @@
 						<input type="hidden" name="token" value="{{ csrf_token('deleteToken' ~ unPokemon.id) }}">
 
 						<button type="submit" class="btn btn-danger">Kill That Pokemon</button>
+                	</form>
+					</td>
+					<td>
+					<form action="{{ path('app_pokemonCassanier_modif', {id : unPokemon.id}) }}">
+						<button type="submit" class="btn btn-primary">Edit That Pokemon</button>
                 	</form>
 					</td>
 				</tr>
