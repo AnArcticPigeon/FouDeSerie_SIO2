@@ -156,4 +156,17 @@ class Serie
         return $this;
     }
 
+    public function isNewSerie(){
+        //renvoie vrai si la serie a moin d'un an, faux sinon
+
+        $dateJour = new \DateTime('now');
+        $diff = $dateJour->diff($this->premiereDiffusion);
+        if($diff->format("%Y") > 1) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
 }
