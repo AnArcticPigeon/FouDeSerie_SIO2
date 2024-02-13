@@ -74,22 +74,37 @@ class PokemonController extends AbstractController
     #[Route('/pokemonCassanier/modif/{id}', name: 'app_pokemonCassanier_modif')]
     public function pokemonCassanierModif($id, Request $request, ManagerRegistry $doctrine): Response
     {
-        $repository = $doctrine->getRepository(PokemonCasanier::class);
-        $pokemon = $repository->find($id);
-        $form=$this->createForm(PokemonCasanierType::class, $pokemon);
-        $form->handleRequest($request);
-        if($form->isSubmitted() and $form->isValid()){
-            $entityManager=$doctrine->getManager();
-            $entityManager->persist($pokemon);
-            $entityManager->flush();
-            return $this->redirectToRoute('app_pokemon_liste');
-        };
+        try{
+            $repository = $doctrine->getRepository(Pokemon::class);
+            $pokemon = $repository->find($id);
+            if(!$pokemon){
+                throw $this->createNotFoundException('pokemon introuvable');
+            }
+            if ($pokemon instanceof PokemonCasanier){
+                $form=$this->createForm(PokemonCasanierType::class, $pokemon);
+                $type = "cassanier";
+            }
+            if ($pokemon instanceof PokemonMer){
+                $form=$this->createForm(PokemonMerType::class, $pokemon);
+                $type = "mer";
+            }
+            $form->handleRequest($request);
+            if($form->isSubmitted() and $form->isValid()){
+                $entityManager=$doctrine->getManager();
+                $entityManager->persist($pokemon);
+                $entityManager->flush();
+                return $this->redirectToRoute('app_pokemon_liste');
+            };
 
-        return $this->render('pokemon/modifyPokemon.html.twig', [
-            'controller_name' => 'AdminController',
-            'type' => 'PokemonCassanier',
-            'formAddPokemon' => $form -> createView(),
-        ]);
+            return $this->render('pokemon/modifyPokemon.html.twig', [
+                'controller_name' => 'AdminController',
+                'type' => $type,
+                'formAddPokemon' => $form -> createView(),
+            ]);
+        }
+        catch (\Exception $e) {
+            return $this->render('errors/error.html.twig',['message'=>$e]);
+        };
     }
 
     #[Route('/pokemon/delete/{id}', name: 'app_pokemonDelete')]
