@@ -10,8 +10,10 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\PokemonCasanier;
 use App\Entity\Pokemon;
+use App\Entity\PokemonMer;
 use App\Form\AddDresseurType;
 use App\Form\PokemonCasanierType;
+use App\Form\PokemonMerType;
 use Exception;
 
 class PokemonController extends AbstractController
@@ -25,11 +27,20 @@ class PokemonController extends AbstractController
                             ['lesPokemons' => $lesPokemons] );
     }
 
-    #[Route('/pokemonCasanier/add', name: 'app_pokemonCasanier_add')]
-    public function addPokemon( Request $request, ManagerRegistry $doctrine): Response
+    #[Route('/pokemonCasanier/add/{type}', name: 'app_pokemonCasanier_add')]
+    public function addPokemon($type, Request $request, ManagerRegistry $doctrine): Response
     {
-        $pokemon= new PokemonCasanier();
-        $form=$this->createForm(PokemonCasanierType::class, $pokemon);
+        switch ($type) {
+            case 'mer':
+                $pokemon = new PokemonMer();
+                $form=$this->createForm(PokemonMerType::class, $pokemon);
+                break;
+            case 'casanier':
+                $pokemon = new PokemonCasanier();
+                $form=$this->createForm(PokemonCasanierType::class, $pokemon);
+                break;
+        }
+
         $form->handleRequest($request);
         if($form->isSubmitted() and $form->isValid()){
             $entityManager = $doctrine->getManager();
@@ -39,6 +50,7 @@ class PokemonController extends AbstractController
         }     
         return $this->render('pokemon/addPokemonCasanier.html.twig', [
             'formAddPokemon' => $form->createView(),
+            'type' => $type
         ]);
     }
 
