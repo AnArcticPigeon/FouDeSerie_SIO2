@@ -30,9 +30,9 @@ class PokemonController extends AbstractController
     #[Route('/pokemon/{type}/add', name: 'app_pokemonCasanier_add')]
     public function addPokemon($type, Request $request, ManagerRegistry $doctrine): Response
     {
-        if($type == "cassanier") {
+        if($type == "casanier") {
             $pokemon = new PokemonCasanier();
-        $form=$this->createForm(PokemonCasanierType::class, $pokemon);
+            $form=$this->createForm(PokemonCasanierType::class, $pokemon);
         }
 
         elseif($type == "mer") {
